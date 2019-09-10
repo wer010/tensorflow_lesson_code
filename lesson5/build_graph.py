@@ -1,11 +1,8 @@
 import tensorflow as tf
 
-def build_graph(X_1, X_2,Y_):
-    w1 = tf.Variable(0.0, name="red_rose_price")
-    w2 = tf.Variable(0.0, name="white_rose_price")
-    b = tf.Variable(1.0, name="package_price")
-
-    Y_c = w1 * X_1 + w2 * X_2 + b
-
+def build(X ,Y_):
+    w = tf.Variable(tf.zeros([2], dtype=tf.float32), name="red_rose_price")
+    b = tf.Variable(tf.ones([1]), name="package_price")
+    Y_c = tf.add(tf.add(tf.multiply(X[:, 0], w[0]), tf.multiply(X[:, 1], w[1])), b, name='y_c')
     l = tf.reduce_mean(tf.square(Y_ - Y_c) / 2)
     return Y_c,l

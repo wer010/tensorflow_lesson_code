@@ -1,25 +1,20 @@
 import tensorflow as tf
 import numpy as np
 import os
+import build_graph
 
 n = 1000
 X1 = np.random.randint(0, 2*n, size=n)
 X2 = np.random.randint(0, 2*n, size=n)
 data = np.stack((X1,X2),1)
 price = 10*X1+ 8*X2 +15
-num_epochs=60000
+num_epochs=10000
 
 
 
 X = tf.placeholder(shape=[None,2], dtype=tf.float32, name="X1")
 Y_ = tf.placeholder(tf.float32, name="Y")
-
-w = tf.Variable(tf.zeros([2],dtype=tf.float32), name="red_rose_price")
-b = tf.Variable(tf.ones([1]), name="package_price")
-
-Y_c = tf.add(tf.add(tf.multiply(X[:,0],w[0]), tf.multiply(X[:,1],w[1])),b, name='y_c')
-l = tf.reduce_mean(tf.square(Y_ - Y_c) / 2)
-
+Y_c,l = build_graph.build(X, Y_)
 
 learning_rate = 0.0005
 t = tf.train.AdamOptimizer(learning_rate).minimize(l)
