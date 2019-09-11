@@ -15,7 +15,7 @@ y = tf.placeholder(tf.float32, name="Y")
 y_c, l = build_graph.build(x, y)
 
 learning_rate = 0.0005
-t = tf.train.AdamOptimizer(learning_rate).minimize(l)
+t = tf.train.AdamOptimizer(learning_rate).minimize(l, name='train_op')
 saver = tf.train.Saver()
 save_path = 'models/'
 if not os.path.exists(save_path):

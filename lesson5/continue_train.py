@@ -1,7 +1,6 @@
 import tensorflow as tf
 import numpy as np
 import os
-import build_graph
 
 n = 1000
 X1 = np.random.randint(0, 2 * n, size=n)
@@ -12,16 +11,23 @@ num_epochs = 10000
 
 
 saver = tf.train.import_meta_graph('./models/lr.ckpt-10000.meta')
-x = tf.get_default_graph().get_tensor_by_name('X1:0')
-y_c = tf.get_default_graph().get_tensor_by_name('y_c:0')
-t = tf.get
-epoch_num = 10000
+g = tf.get_default_graph()
+x = g.get_tensor_by_name('X1:0')
+y = g.get_tensor_by_name('Y:0')
+y_c = g.get_tensor_by_name('y_c:0')
+l = g.get_tensor_by_name('loss:0')
+w = g.get_tensor_by_name('rose_price:0')
+b = g.get_tensor_by_name('package_price:0')
+t = g.get_operation_by_name('train_op')
 
 with tf.Session() as sess:
-    saver.restore(sess, './models/lr.ckpt-10000')
+    saver_name = tf.train.latest_checkpoint('./models/')
+    start_step = int(saver_name.split('-')[-1])
+
+    saver.restore(sess, saver_name)
     re = sess.run(y_c, feed_dict={x: [[10, 10]]})
     print(re)
-    for epoch_num in range(num_epochs+1):
+    for epoch_num in range(start_step+1, start_step+num_epochs+1):
         loss_value, _ = sess.run([l, t], feed_dict={x: data, y: price})
         # 每训练5000步显示一下当前的loss
         if epoch_num % 5000 is 0:
