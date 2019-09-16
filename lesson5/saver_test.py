@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import os
-import build_graph
+from lesson5 import build_graph
 
 n = 1000
 X1 = np.random.randint(0, 2 * n, size=n)
@@ -28,12 +28,12 @@ with tf.Session() as sess:
     w = tf.get_default_graph().get_tensor_by_name('rose_price:0')
     b = tf.get_default_graph().get_tensor_by_name('package_price:0')
     # 训练模型
-    for epoch_num in range(num_epochs+1):
+    for epoch_num in range(num_epochs):
         loss_value, _ = sess.run([l, t], feed_dict={x: data, y: price})
         # 每训练5000步显示一下当前的loss
-        if epoch_num % 5000 is 0:
-            print('epoch %d, loss=%f' % (epoch_num, loss_value))
-            s_p = saver.save(sess, './models/lr.ckpt', global_step=epoch_num)
+        if (epoch_num+1) % 5000 is 0:
+            print('epoch %d, loss=%f' % (epoch_num+1, loss_value))
+            s_p = saver.save(sess, './models/lr.ckpt', global_step=epoch_num+1)
             print(s_p)
             print(sess.run([w, b]))
             print(sess.run(y_c, feed_dict={x: [[10, 10]]}))
