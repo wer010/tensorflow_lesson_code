@@ -8,8 +8,9 @@ data = np.stack((X1, X2), 1)
 price = 10 * X1 + 8 * X2 + 15
 num_epochs = 5000
 
+saver_name = tf.train.latest_checkpoint('./models/')
 
-saver = tf.train.import_meta_graph('./models/lr.ckpt-10000.meta')
+saver = tf.train.import_meta_graph(saver_name+'.meta')
 g = tf.get_default_graph()
 x = g.get_tensor_by_name('X1:0')
 y = g.get_tensor_by_name('Y:0')
@@ -20,7 +21,6 @@ b = g.get_tensor_by_name('package_price:0')
 t = g.get_operation_by_name('train_op')
 
 with tf.Session() as sess:
-    saver_name = tf.train.latest_checkpoint('./models/')
     start_step = int(saver_name.split('-')[-1])
 
     saver.restore(sess, saver_name)
